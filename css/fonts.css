@@ -1,0 +1,33 @@
+/*
+Fichier: fonts.css
+Rôle: Définit les polices principales pour l'application, en séparant les styles pour les titres et le corps du texte.
+Polices importées : Cinzel (titres), Roboto (corps)
+*/
+
+/* Import des polices */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@400;700&display=swap');
+
+/* Variables CSS pour centraliser les fonts */
+:root {
+    --font-heading: 'Cinzel', serif; /* Pour les titres */
+    --font-body: 'Roboto', sans-serif; /* Pour le texte principal */
+}
+
+/* Application par défaut */
+body {
+    font-family: var(--font-body);
+    color: #ffffff; /* Couleur par défaut du texte */
+    background-color: #1c1c1c; /* Fond sombre (ajustable si besoin) */
+    margin: 0;
+    padding: 0;
+
+    /* Amélioration du rendu des polices */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Style pour les titres */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    color: #ffc107; /* Jaune pour les titres */
+}

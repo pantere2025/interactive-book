@@ -1,0 +1,237 @@
+/* Modal global */
+#inventory-modal {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    animation: fadeIn 0.5s ease-in-out;
+    overflow: hidden;
+}
+
+/* Titre principal de l'inventaire avec bouton de fermeture intégré */
+.inventory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #444444;
+    padding: 10px 20px;
+    border-radius: 10px;
+    width: 75%;
+    margin: 0 auto;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.inventory-header h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #ffffff;
+    text-transform: uppercase;
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    flex-grow: 1;
+}
+
+.inventory-header .close-button {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #ff4500;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 15px;
+}
+
+.inventory-header .close-button:hover {
+    background-color: #ff6347;
+    color: #000000;
+    transform: scale(1.1);
+}
+
+/* Contenu du modal */
+#inventory-modal .modal-content {
+    max-height: 80vh;
+    overflow-y: auto;
+    background-color: #1c1c1c;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 800px;
+    width: 90%;
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Titre des catégories */
+.inventory-category h3 {
+    font-size: 1.5rem;
+    color: #ffc107;
+    text-align: center;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+/* Grille des objets */
+.inventory-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Carte des objets */
+.inventory-item {
+    text-align: center;
+    background-color: #2d2d2d;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.inventory-item img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 5px;
+}
+
+.inventory-item p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: #ffffff;
+}
+
+.inventory-item button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background-color 0.3s ease;
+}
+
+.inventory-item button:hover {
+    background-color: #0056b3;
+}
+
+/* Objets désactivés */
+.inventory-item.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.inventory-item.disabled img {
+    filter: grayscale(100%);
+}
+
+.inventory-item.disabled button {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Description des effets */
+.inventory-item .item-effect {
+    font-size: 0.9em;
+    color: #FFD700;
+    margin: 5px 0;
+    font-style: italic;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+#inventory-modal.fade-out {
+    animation: fadeOut 0.5s ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+/* Style pour les navigateurs Webkit */
+#inventory-modal .modal-content::-webkit-scrollbar {
+    width: 10px;
+}
+
+#inventory-modal .modal-content::-webkit-scrollbar-track {
+    background: #1c1c1c;
+    border-radius: 10px;
+}
+
+#inventory-modal .modal-content::-webkit-scrollbar-thumb {
+    background: #444444;
+    border-radius: 10px;
+    border: 2px solid #1c1c1c;
+}
+
+#inventory-modal .modal-content::-webkit-scrollbar-thumb:hover {
+    background: #ff4500;
+}
+
+/* Style pour Firefox */
+#inventory-modal .modal-content {
+    scrollbar-width: thin;
+    scrollbar-color: #444444 #1c1c1c;
+}
+
+/* Effet de succès (bordure verte clignotante) */
+.highlight-success {
+    animation: highlight-success 0.8s ease-in-out; /* Réduction à 0.8 seconde */
+}
+
+@keyframes highlight-success {
+    0%, 100% {
+        border: 3px solid transparent;
+    }
+    25%, 75% { /* Apparition et disparition plus rapides */
+        border: 3px solid #28a745; /* Vert */
+    }
+}
+
+/* Effet d'échec (bordure rouge clignotante) */
+.highlight-fail {
+    animation: highlight-fail 0.8s ease-in-out; /* Réduction à 0.8 seconde */
+}
+
+@keyframes highlight-fail {
+    0%, 100% {
+        border: 3px solid transparent;
+    }
+    25%, 75% { /* Apparition et disparition plus rapides */
+        border: 3px solid #dc3545; /* Rouge */
+    }
+}
+

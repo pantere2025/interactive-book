@@ -1,0 +1,226 @@
+/* ======================= */
+/* Effet de tremblement */
+/* ======================= */
+
+.shake-effect {
+    animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-5px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+    100% { transform: translateX(0); }
+}
+
+/* ======================= */
+/* Conteneur de l'ennemi */
+/* ======================= */
+
+.enemy-image {
+    position: relative;  /* Contient l'effet de dégâts */
+    display: inline-block;
+    overflow: hidden;    /* Assure que les effets ne débordent pas */
+    max-width: 100%;     /* Empêche l'image de déborder */
+}
+
+.enemy-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Assure que l'image et l'overlay restent proportionnels */
+}
+
+/* ======================= */
+/* Effet de dégâts */
+/* ======================= */
+
+.damage-overlay {
+    position: absolute;
+    top: 0;  /* Aligne parfaitement le haut */
+    left: 0;
+    width: 100%;
+    height: 98%;  /* Ajustement pour éviter le débordement */
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out, filter 0.5s ease-in-out;
+    pointer-events: none;
+    z-index: 2; /* Assure que l'effet est au-dessus de l'image */
+    background-size: 100% 100%; /* Ajuste l'image pour qu'elle remplisse complètement le conteneur */
+    background-repeat: no-repeat;
+    background-position: top left; /* Alignement parfait du haut sans débordement */
+}
+
+
+/* Effets spécifiques par type de dégâts */
+.blood-effect {
+    background: url('../images/effects/blood_splatter.png') no-repeat center center;
+    background-size: cover;
+}
+
+.crack-effect {
+    background: url('../images/effects/crack_splatter.png') no-repeat center center;
+    background-size: cover;
+}
+
+.darkness-effect {
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.7) 30%, rgba(0, 0, 0, 0.3) 70%);
+}
+
+/* ======================= */
+/* Animation progressive */
+/* ======================= */
+
+@keyframes fadeDamage {
+    0% { opacity: 0; transform: scale(0.9); }
+    50% { opacity: 0.5; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1.05); }
+}
+
+.enemy-image .damage-overlay.fade-in {
+    animation: fadeDamage 0.7s ease-out;
+}
+
+/* ======================= */
+/* Gestion des dégâts en fonction des HP */
+/* ======================= */
+
+.enemy-image.low-hp .damage-overlay {
+    opacity: 0.85;  /* Maintenant atteint quand HP est faible */
+    filter: grayscale(0%) brightness(0.8);
+}
+
+.enemy-image.medium-hp .damage-overlay {
+    opacity: 0.6;
+}
+
+.enemy-image.high-hp .damage-overlay {
+    opacity: 0.3;
+}
+
+@media (max-width: 768px) {
+    .damage-overlay {
+        height: 97%; /* Ajustement précis pour éviter tout débordement */
+        background-size: 100% 97%; /* Éviter les débordements */
+    }
+}
+
+
+/* ======================= */
+/* Effet de clignotement rouge à faible HP */
+/* ======================= */
+
+.red-blink-effect {
+    position: relative; /* Assure que l'effet est bien positionné */
+}
+
+/* Clignotement lent pour HP entre 20% et 10% */
+.red-blink-effect.slow::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 0, 0, 0.4); /* Rouge semi-transparent */
+    opacity: 0;
+    animation: redBlinkSlow 1s infinite alternate ease-in-out;
+    pointer-events: none; /* Ne bloque pas les interactions */
+}
+
+/* Clignotement rapide pour HP inférieurs à 10% */
+.red-blink-effect.fast::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 0, 0, 0.6); /* Rouge plus intense */
+    opacity: 0;
+    animation: redBlinkFast 0.3s infinite alternate ease-in-out;
+    pointer-events: none;
+}
+
+/* Animation pour clignotement lent */
+@keyframes redBlinkSlow {
+    0% { opacity: 0; }
+    100% { opacity: 0.3; } /* Réduire cette valeur pour diminuer la visibilité */
+}
+
+/* Animation pour clignotement rapide */
+@keyframes redBlinkFast {
+    0% { opacity: 0; }
+    100% { opacity: 0.5; } /* Réduire cette valeur pour un effet moins intense */
+}
+
+/* 
+   Animation de dissolution pour l'effet de coup fatal.
+   Cette animation réduit progressivement l'opacité de l'ennemi et ajoute un effet de flou,
+   créant une impression de disparition progressive.
+*/
+@keyframes dissolve-effect {
+    0% {
+        opacity: 1; /* L'image est totalement visible */
+        filter: blur(0px); /* Aucun flou */
+    }
+    50% {
+        opacity: 0.5; /* Demi-transparence pour un effet progressif */
+        filter: blur(2px); /* Ajout léger de flou */
+    }
+    100% {
+        opacity: 0; /* Disparition totale de l'image */
+        filter: blur(5px); /* Flou maximal pour renforcer l'effet de disparition */
+    }
+}
+
+/* 
+   Classe utilitaire pour appliquer l'animation de dissolution.
+   Ajoutée dynamiquement via le script lors du coup fatal.
+*/
+.dissolve {
+    animation: dissolve-effect 1.5s forwards; /* Lance l'animation sur 1.5 secondes */
+}
+
+/* Assurer une disparition en douceur de l'overlay */
+.damage-overlay {
+    transition: opacity 0.5s ease-out;
+}
+
+/* Supprimer l'overlay après disparition de l'ennemi */
+.enemy-image.dissolve .damage-overlay {
+    opacity: 0 !important;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* Désactiver les animations de clignotement une fois la dissolution appliquée */
+.enemy-image.dissolve::after {
+    display: none !important;
+}
+
+/* Désactiver l'animation de clignotement rouge une fois la dissolution en cours */
+.enemy-image.dissolve.red-blink-effect::after {
+    animation: none !important;
+    opacity: 0 !important;
+}
+
+/* Supprimer les animations et rendre invisible complètement après dissolution */
+.enemy-image.dissolve img {
+    visibility: hidden;
+}
+
+
+@keyframes fadeToBlackAndBlur {
+    0% {
+        filter: grayscale(0%) blur(0px);
+    }
+    100% {
+        filter: grayscale(100%) blur(5px);
+    }
+}
+
+.enemy-defeated {
+    animation: fadeToBlackAndBlur 2s ease-in-out forwards;
+}
+
